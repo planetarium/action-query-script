@@ -1,0 +1,23 @@
+{
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.powershell"
+      ],
+      "settings": {
+        "terminal.integrated.profiles.linux": {
+          "pwsh": {
+            "path": "pwsh",
+            "args": [
+              "-NoExit"
+            ]
+          }
+        },
+        "terminal.integrated.defaultProfile.linux": "pwsh"
+      }
+    }
+  },
+  "build": {
+    "dockerfile": "../Dockerfile"
+  }
+}
