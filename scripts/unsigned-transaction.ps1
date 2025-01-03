@@ -25,9 +25,9 @@ $field = ./scripts/generate-method.ps1 -Name "unsignedTransaction" -Arguments $a
 
 $query = @"
 query {
-    transaction{
+  transaction{
 $field
-    }
+  }
 }
 "@
 

@@ -10,7 +10,7 @@ $field = ./scripts/generate-method.ps1 -Name "nextTxNonce" -Arguments @{ "addres
 
 $query = @"
 query {
-    $field
+  $field
 }
 "@
 
