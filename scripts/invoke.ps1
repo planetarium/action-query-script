@@ -1,5 +1,7 @@
 Param(
+    [Parameter(Mandatory = $true)]
     [string]$Url,
+    [Parameter(Mandatory = $true)]
     [string]$Query
 )
 
@@ -9,4 +11,4 @@ if ($result.errors) {
     throw $result.errors[0]
 }
 
-$result.data
+$result

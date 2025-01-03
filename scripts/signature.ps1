@@ -1,8 +1,11 @@
 Param(
+    [Parameter(Mandatory = $true)]
     [string]$KeyId,
+    [Parameter(Mandatory = $true)]
     [string]$UnsignedTransaction,
     [Parameter(Mandatory = $true)]
-    [securestring]$PassPhrase
+    [securestring]$PassPhrase,
+    [switch]$Quiet
 )
 
 $txPath = New-TemporaryFile
@@ -12,11 +15,17 @@ try {
     $plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
     $bytes = [System.Convert]::FromHexString($UnsignedTransaction)
     [System.IO.File]::WriteAllBytes($txPath, $bytes)
-    planet key sign --passphrase $plainPassword $KeyId $txPath 2>$errorPath
+    $signature = planet key sign --passphrase $plainPassword $KeyId $txPath 2>$errorPath
     if ($LASTEXITCODE) {
         $errorMessage = $(Get-Content -Path $tempPath -Raw)
         throw $errorMessage
     }
+
+    if (!$Quiet) {
+        Write-Host "$signature`n"
+    }
+
+    $signature
 }
 finally {
     Remove-Item $txPath -ErrorAction SilentlyContinue

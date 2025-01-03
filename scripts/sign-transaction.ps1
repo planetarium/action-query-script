@@ -1,23 +1,29 @@
 Param(
+    [Parameter(Mandatory = $true)]
     [string]$Url,
+    [Parameter(Mandatory = $true)]
     [string]$UnsignedTransaction,
-    [string]$Signature
+    [Parameter(Mandatory = $true)]
+    [string]$Signature,
+    [switch]$Quiet
 )
 
 $arguments = @{
     "unsignedTransaction" = $UnsignedTransaction
-    "signature" = $Signature
+    "signature"           = $Signature
 }
 
 $field = ./scripts/generate-method.ps1 -Name "signTransaction" -Arguments $arguments -IndentLevel 2 -PrettyPrint
 
 $query = @"
 query {
-    transaction{
+  transaction{
 $field
-    }
+  }
 }
 "@
 
+./scripts/write-host-graphql.ps1 -Query $query -Quiet:$Quiet
 $result = ./scripts/invoke.ps1 -Url $Url -Query $query
-$result.transaction.signTransaction
+./scripts/write-host-json.ps1 -Object $result -Quiet:$Quiet
+$result.data.transaction.signTransaction

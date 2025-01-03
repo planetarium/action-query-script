@@ -1,11 +1,12 @@
 Param(
+    [Parameter(Mandatory = $true)]
     [hashtable]$Arguments,
     [switch]$PrettyPrint,
     [int]$IndentLevel = 0
 )
 
-$level1 = "".PadRight($IndentLevel * 4, ' ')
-$level2 = "".PadRight(($IndentLevel + 1) * 4, ' ')
+$level1 = "".PadRight($IndentLevel * 2, ' ')
+$level2 = "".PadRight(($IndentLevel + 1) * 2, ' ')
 $expression = $level1
 
 if ($Arguments.Count -gt 0) {

@@ -1,12 +1,20 @@
 Param(
-    [string]$PrivateKey
+    [Parameter(Mandatory = $true)]
+    [string]$PrivateKey,
+    [switch]$IsPublicKey
 )
 
-$tempPath = New-TemporaryFile
+$errorPath = New-TemporaryFile
 try {
-    $line = planet key derive $PrivateKey 2>$tempPath
+    if ($IsPublicKey) {
+        $line = planet key derive --public-key $PrivateKey 2>$errorPath
+    }
+    else {
+        $line = planet key derive $PrivateKey 2>$errorPath
+    }
+
     if ($LASTEXITCODE) {
-        $errorMessage = $(Get-Content -Path $tempPath -Raw)
+        $errorMessage = $(Get-Content -Path $errorPath -Raw)
         throw $errorMessage
     }
 
@@ -17,5 +25,5 @@ try {
     }
 }
 finally {
-    Remove-Item $tempPath -ErrorAction SilentlyContinue
+    Remove-Item $errorPath -ErrorAction SilentlyContinue
 }

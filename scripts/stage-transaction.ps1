@@ -1,6 +1,9 @@
 Param(
+    [Parameter(Mandatory = $true)]
     [uri]$Url,
-    [string]$SignedTransaction
+    [Parameter(Mandatory = $true)]
+    [string]$SignedTransaction,
+    [switch]$Quiet
 )
 
 $arguments = @{
@@ -15,5 +18,7 @@ $field
 }
 "@
 
+./scripts/write-host-graphql.ps1 -Query $query -Quiet:$Quiet
 $result = ./scripts/invoke.ps1 -Url $Url -Query $query
-$result.stageTransaction
+./scripts/write-host-json.ps1 -Object $result -Quiet:$Quiet
+$result.data.stageTransaction

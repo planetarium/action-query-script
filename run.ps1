@@ -1,41 +1,61 @@
 Param( 
+    [Parameter(Mandatory = $true)]
     [string]$Url,
-    [string]$PrivateKey,
+    [Parameter(Mandatory = $true)]
+    [string]$KeyId,
+    [Parameter(Mandatory = $true)]
     [string]$ActionQueryName,
-    [hashtable]$ActionQueryArguments
+    [hashtable]$ActionQueryArguments,
+    [Parameter(Mandatory = $true)]
+    [securestring]$PassPhrase,
+    [switch]$Quiet,
+    [long]$MaxGasPrice = 1
 )
-
-$dotnetVersion = Invoke-Expression "dotnet --version"
-if ($LASTEXITCODE) {
-    throw "dotnet is not installed."
-}
 
 $planetVersion = Invoke-Expression "planet --version"
 if ($LASTEXITCODE) {
     throw "planet is not installed."
 }
 
-Write-Host "Dotnet: $dotnetVersion"
-Write-Host "Planet: $planetVersion"
+if (!$Quiet) {
+    Write-Host "## Arguments`n"
+    ./scripts/write-host-json.ps1 -HashTable @{
+        Planet               = $planetVersion
+        Url                  = $Url
+        KeyId                = $KeyId
+        ActionQueryName      = $ActionQueryName
+        ActionQueryArguments = $ActionQueryArguments
+    }
+}
 
-$derived = ./scripts/key-derive.ps1 -PrivateKey $privateKey
-$signerPublicKey = $derived.PublicKey
-$signer = $derived.Address
+$derived = ./scripts/key-get.ps1 -KeyId $KeyId -PassPhrase $PassPhrase
+$publicKey = $derived.PublicKey
+$address = $derived.Address
 
-Write-Host "Action Query Name: $actionQueryName"
-Write-Host "Action Query Arguments: $actionQueryArguments"
+if (!$Quiet) {
+    Write-Host "## Key Information`n"
+    ./scripts/write-host-json.ps1 -HashTable @{
+        PublicKey = $publicKey
+        Address   = $address
+    }
+}
 
-$keyId = ./scripts/key-id.ps1 -Address $signer
-Write-Host "Key ID: $keyId"
-$plainValue = ./scripts/action-query.ps1 -Url $url -Name $actionQueryName -Arguments $actionQueryArguments
-Write-Host "Plain Value: $plainValue"
-$nonce = ./scripts/nonce.ps1 -Url $url -Address $signer
-Write-Host "Nonce: $nonce"
-$unsignedTransaction = ./scripts/unsigned-transaction.ps1 -Url $url -PublicKey $signerPublicKey -MaxGasPrice 1 -Nonce $nonce -PlainValue $plainValue
-Write-Host "Unsigned Transaction: $unsignedTransaction"
-$signature = ./scripts/signature.ps1 -KeyId $keyId -UnsignedTransaction $unsignedTransaction
-Write-Host "Signature: $signature"
-$signedTransaction = ./scripts/sign-transaction.ps1 -Url $url -UnsignedTransaction $unsignedTransaction -Signature $signature
-Write-Host "Signed Transaction: $signedTransaction"
-$transactionId = ./scripts/stage-transaction.ps1 -Url $url -SignedTransaction $signedTransaction
-Write-Host "Transaction ID: $transactionId"
+./scripts/write-host-title.ps1 "## Action Query`n" -Quiet:$Quiet
+$plainValue = ./scripts/action-query.ps1 -Url $url -Name $actionQueryName -Arguments $actionQueryArguments -Quiet:$Quiet
+
+./scripts/write-host-title.ps1 "## Nonce`n" -Quiet:$Quiet
+$nonce = ./scripts/nonce.ps1 -Url $url -Address $address -Quiet:$Quiet
+
+./scripts/write-host-title.ps1 "## Unsigned Transaction`n" -Quiet:$Quiet
+$unsignedTransaction = ./scripts/unsigned-transaction.ps1 -Url $url -PublicKey $publicKey -MaxGasPrice $MaxGasPrice -Nonce $nonce -PlainValue $plainValue -Quiet:$Quiet
+
+./scripts/write-host-title.ps1 "## Signature`n" -Quiet:$Quiet
+$signature = ./scripts/signature.ps1 -KeyId $keyId -UnsignedTransaction $unsignedTransaction -PassPhrase $PassPhrase -Quiet:$Quiet
+
+./scripts/write-host-title.ps1 "## Sign Transaction`n" -Quiet:$Quiet
+$signedTransaction = ./scripts/sign-transaction.ps1 -Url $url -UnsignedTransaction $unsignedTransaction -Signature $signature -Quiet:$Quiet
+
+./scripts/write-host-title.ps1 "## Stage Transaction`n" -Quiet:$Quiet
+$transactionId = ./scripts/stage-transaction.ps1 -Url $url -SignedTransaction $signedTransaction -Quiet:$Quiet
+
+$transactionId
