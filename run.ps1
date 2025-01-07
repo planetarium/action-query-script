@@ -12,7 +12,8 @@ Param(
     [string]$Url,
     [switch]$Quiet,
     [long]$MaxGasPrice = 1,
-    [switch]$Confirm
+    [switch]$Confirm,
+    [switch]$Watch
 )
 
 $oldErrorActionPreference = $ErrorActionPreference
@@ -73,19 +74,23 @@ try {
     $nonce = ./scripts/nonce.ps1 -Url $Url -Address $address -Quiet:$Quiet
 
     ./scripts/write-host-title.ps1 "## Unsigned Transaction`n" -Quiet:$Quiet
-    $unsignedTransaction = ./scripts/unsigned-transaction.ps1 -Url $Url -PublicKey $publicKey -MaxGasPrice $MaxGasPrice -Nonce $nonce -PlainValue $plainValue -Quiet:$Quiet
+    $unsignedTransaction = ./scripts/transaction-unsigned.ps1 -Url $Url -PublicKey $publicKey -MaxGasPrice $MaxGasPrice -Nonce $nonce -PlainValue $plainValue -Quiet:$Quiet
 
     ./scripts/write-host-title.ps1 "## Signature`n" -Quiet:$Quiet
     $signature = ./scripts/signature.ps1 -KeyId $keyId -UnsignedTransaction $unsignedTransaction -PassPhrase $PassPhrase -Quiet:$Quiet
 
     ./scripts/write-host-title.ps1 "## Sign Transaction`n" -Quiet:$Quiet
-    $signedTransaction = ./scripts/sign-transaction.ps1 -Url $Url -UnsignedTransaction $unsignedTransaction -Signature $signature -Quiet:$Quiet
+    $signedTransaction = ./scripts/transaction-sign.ps1 -Url $Url -UnsignedTransaction $unsignedTransaction -Signature $signature -Quiet:$Quiet
 
     $confirmation = $Confirm ? "yes" : (Read-Host "Do you want to stage the transaction? (yes/no)")
     if (($confirmation -eq "yes") -or ($confirmation -eq "y")) {
         ./scripts/write-host-title.ps1 "## Stage Transaction`n" -Quiet:$Quiet
-        $transactionId = ./scripts/stage-transaction.ps1 -Url $Url -SignedTransaction $signedTransaction -Quiet:$Quiet
-        $transactionId
+        $transactionId = ./scripts/transaction-stage.ps1 -Url $Url -SignedTransaction $signedTransaction -Quiet:$Quiet
+        
+        if ($Watch) {
+            ./scripts/write-host-title.ps1 "## Transaction Result`n" -Quiet:$Quiet
+            ./scripts/transaction-result.ps1 -Url $Url -TxId $transactionId -Quiet:$Quiet
+        }
     }
     else {
         Write-Error "Transaction is not staged." -ErrorAction Continue
