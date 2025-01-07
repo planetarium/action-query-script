@@ -3,21 +3,22 @@
 ## Usage
 
 ```powershell
-./run.ps1 -Url <graphql-url> -KeyId <key-id> -ActionQueryName <query-name>
+./run.ps1 -KeyId <key-id> -Name <query-name> -Url <graphql-url>
 ```
 
 | The above script must be run in a pwsh environment.
+| If the ACTION_QUERY_URL environment variable is set, the -Url parameter can be omitted.
 
 If a specific query requires arguments, the script can be executed as shown below.
 
 ```powershell
-./run.ps1 -Url <graphql-url> -KeyId <key-id> -ActionQueryName <query-name> -Arguments @{ arg1 = value1 }
+./run.ps1 -KeyId <key-id> -Name <query-name> -Arguments @{ arg1 = value1 }
 ```
 
 To execute the script in a Bash environment, it can be run as shown below.
 
 ```bash
-pwsh -c './run.ps1 -Url <graph-ql> -KeyId <key-id> -ActionQueryName <query-name> -ActionQueryArguments @{ "arg1" = "value1" }'
+pwsh -c './run.ps1 -Url <graph-ql> -KeyId <key-id> -Name <query-name> -Arguments @{ "arg1" = "value1" }'
 ```
 
 ## Key ID
