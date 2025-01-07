@@ -17,8 +17,12 @@ query {
   stateQuery {
     $field {
       power
+      isActive
       totalShares
-      totalDelegated {
+      jailed
+      jailedUntil
+      tombstoned
+      totalDelegated { 
         currency
         quantity
       }
