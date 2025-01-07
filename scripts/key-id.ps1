@@ -18,5 +18,5 @@ if ($idByAddress.ContainsKey($Address)) {
     $idByAddress[$Address]
 }
 else {
-    throw "Key not found"
+    throw "KeyId cannot be found for the given address. The private key must be imported into the planet."
 }

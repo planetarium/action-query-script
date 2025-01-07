@@ -1,7 +1,9 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
-Param( 
-    [Parameter(Mandatory = $true)]
+Param(
+    [Parameter(Mandatory = $true, ParameterSetName = "KeyId", Position = 0)]
     [string]$KeyId,
+    [Parameter(Mandatory = $true, ParameterSetName = "Address", Position = 0)]
+    [string]$Address,
     [Parameter(Mandatory = $true)]
     [string]$Name,
     [hashtable]$Arguments,
@@ -53,6 +55,10 @@ try {
             Name      = $Name
             Arguments = $Arguments
         }
+    }
+
+    if (!$KeyId) {
+        $KeyId = ./scripts/key-id.ps1 -Address $Address
     }
 
     $derived = ./scripts/key-get.ps1 -KeyId $KeyId -PassPhrase $PassPhrase
