@@ -15,18 +15,19 @@ Param(
 $decimalPlaces = 18
 $quntity = $MaxGasPrice
 $arguments = @{
-    "publicKey"   = $PublicKey
-    "maxGasPrice" = @{ quantity = $quntity; ticker = "Mead"; decimalPlaces = $decimalPlaces; }
-    "nonce"       = $Nonce
-    "plainValue"  = $PlainValue
+    publicKey   = $PublicKey
+    maxGasPrice = @{ quantity = $quntity; ticker = "Mead"; decimalPlaces = $decimalPlaces; }
+    nonce       = $Nonce
+    plainValue  = $PlainValue
 }
 
 $field = ./scripts/generate-method.ps1 -Name "unsignedTransaction" -Arguments $arguments -IndentLevel 2 -PrettyPrint
+$field = $field.TrimStart()
 
 $query = @"
 query {
   transaction{
-$field
+    $field
   }
 }
 "@

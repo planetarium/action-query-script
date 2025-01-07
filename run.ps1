@@ -1,16 +1,15 @@
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
 Param(
     [Parameter(Mandatory = $true, ParameterSetName = "KeyId", Position = 0)]
+    [AllowEmptyString()]
     [string]$KeyId,
-    [Parameter(Mandatory = $true, ParameterSetName = "Address", Position = 0)]
-    [string]$Address,
+    [Parameter(Mandatory = $true, ParameterSetName = "Signer", Position = 0)]
+    [AllowEmptyString()]
+    [string]$Signer,
     [Parameter(Mandatory = $true)]
     [string]$Name,
+    [Parameter(Mandatory = $true)]
+    [securestring]$PassPhrase,
     [hashtable]$Arguments,
-    [Parameter(Mandatory = $true, HelpMessage = "The passphrase to get the private key from the planet.")]
-    [AllowNull()]
-    [AllowEmptyString()]
-    [string]$PassPhrase,
     [string]$Url,
     [switch]$Quiet,
     [long]$MaxGasPrice = 1,
@@ -22,29 +21,12 @@ $oldErrorActionPreference = $ErrorActionPreference
 $ErrorActionPreference = 'Stop'
 
 try {
-    if ($null -eq $PassPhrase) {
-        $PassPhrase = Read-Host "Enter the passphrase to get the private key from the planet." -AsSecureString
-    }
-    elseif ($PassPhrase -eq "") {
-        $PassPhrase = New-Object -TypeName System.Security.SecureString
-    }
-    else {
-        $PassPhrase = ConvertTo-SecureString -String $PassPhrase -AsPlainText -Force
-    }
-
     $planetVersion = Invoke-Expression "planet --version"
     if ($LASTEXITCODE) {
         throw "planet is not installed."
     }
 
-    if (!$Url) {
-        if ($env:ACTION_QUERY_URL) {
-            $Url = $env:ACTION_QUERY_URL
-        }
-        else {
-            throw "The URL for the action query is not specified. Please set the -Url parameter or the ACTION_QUERY_URL environment variable."
-        }
-    }
+    $Url = ./scripts/resolve-url.ps1 -Url $Url
 
     if (!$Quiet) {
         Write-Host "## Arguments`n"
@@ -58,7 +40,7 @@ try {
     }
 
     if (!$KeyId) {
-        $KeyId = ./scripts/key-id.ps1 -Address $Address
+        $KeyId = ./scripts/key-id.ps1 -Address $Signer
     }
 
     $derived = ./scripts/key-get.ps1 -KeyId $KeyId -PassPhrase $PassPhrase
@@ -97,6 +79,8 @@ try {
             ./scripts/write-host-title.ps1 "## Transaction Result`n" -Quiet:$Quiet
             ./scripts/transaction-result.ps1 -Url $Url -TxId $transactionId -Quiet:$Quiet
         }
+
+        $transactionId
     }
     else {
         Write-Error "Transaction is not staged." -ErrorAction Continue

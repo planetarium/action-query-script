@@ -9,16 +9,17 @@ Param(
 )
 
 $arguments = @{
-    "unsignedTransaction" = $UnsignedTransaction
-    "signature"           = $Signature
+    unsignedTransaction = $UnsignedTransaction
+    signature           = $Signature
 }
 
-$field = ./scripts/generate-method.ps1 -Name "signTransaction" -Arguments $arguments -IndentLevel 2 -PrettyPrint
+$field = ./scripts/generate-method.ps1 -Name "signTransaction" -Arguments $arguments -IndentLevel 1 -PrettyPrint
+$field = $field.TrimStart()
 
 $query = @"
 query {
   transaction{
-$field
+    $field
   }
 }
 "@

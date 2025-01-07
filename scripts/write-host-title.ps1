@@ -1,7 +1,10 @@
 Param(
-  [Parameter(Mandatory = $true)]
-  [string]$Text,
-  [switch]$Quiet
+    [Parameter(Mandatory = $true)]
+    [string]$Text,
+    [switch]$Quiet
 )
 
-Write-Host $Text
+if (!$Quiet) {
+    Write-Host $Text
+}
+

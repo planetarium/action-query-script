@@ -6,7 +6,8 @@ Param(
     [switch]$Quiet
 )
 
-$field = ./scripts/generate-method.ps1 -Name "nextTxNonce" -Arguments @{ "address" = $Address }
+$field = ./scripts/generate-method.ps1 -Name "nextTxNonce" -Arguments @{ "address" = $Address } -IndentLevel 1 -PrettyPrint
+$field = $field.TrimStart()
 
 $query = @"
 query {

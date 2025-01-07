@@ -8,11 +8,12 @@ Param(
 )
 
 $field = ./scripts/generate-method.ps1 -Name $Name -Arguments $Arguments -IndentLevel 2 -PrettyPrint
+$field = $field.TrimStart()
 
 $query = @"
 query {
   actionQuery {
-$field
+    $field
   }
 }
 "@

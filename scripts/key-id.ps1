@@ -8,6 +8,10 @@ if ($LASTEXITCODE) {
     throw "Failed to identify key"
 }
 
+if (!$Address.StartsWith("0x")) {
+    $Address = "0x$Address"
+}
+
 $idByAddress = @{}
 foreach ($line in $lines) {
     $items = $line -split " "

@@ -7,14 +7,15 @@ Param(
 )
 
 $arguments = @{
-    "payload" = $SignedTransaction
+    payload = $SignedTransaction
 }
 
 $field = ./scripts/generate-method.ps1 -Name "stageTransaction" -Arguments $arguments -IndentLevel 1 -PrettyPrint
+$field = $field.TrimStart()
 
 $query = @"
 mutation {
-$field
+  $field
 }
 "@
 

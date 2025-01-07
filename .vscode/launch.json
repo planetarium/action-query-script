@@ -9,7 +9,16 @@
             "type": "PowerShell",
             "request": "launch",
             "script": "${workspaceFolder}/run.ps1",
-            "args": []
+            "args": [
+                "-KeyId",
+                "08c93f34-97e4-4527-9a5b-fa5dbd6334f6",
+                "-Name",
+                "makeGuild",
+                "-Arguments",
+                "@{ validatorAddress = '0x3228A780058F405f118116C9AE11B90B746Ed32D' }",
+                "-Confirm",
+                "-Watch"
+            ]
         }
     ]
 }
