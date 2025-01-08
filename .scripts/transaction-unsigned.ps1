@@ -21,7 +21,7 @@ $arguments = @{
     plainValue  = $PlainValue
 }
 
-$field = ./scripts/generate-method.ps1 -Name "unsignedTransaction" -Arguments $arguments -IndentLevel 2 -PrettyPrint
+$field = ./.scripts/generate-method.ps1 -Name "unsignedTransaction" -Arguments $arguments -IndentLevel 2 -PrettyPrint
 $field = $field.TrimStart()
 
 $query = @"
@@ -32,7 +32,7 @@ query {
 }
 "@
 
-./scripts/write-host-graphql.ps1 -Query $query -Quiet:$Quiet
-$result = ./scripts/invoke.ps1 -Url $Url -Query $query
-./scripts/write-host-json.ps1 -Object $result -Quiet:$Quiet
+./.scripts/write-graphql.ps1 -Query $query -Quiet:$Quiet
+$result = ./.scripts/invoke.ps1 -Url $Url -Query $query
+./.scripts/write-json.ps1 -Object $result -Quiet:$Quiet
 $result.data.transaction.unsignedTransaction

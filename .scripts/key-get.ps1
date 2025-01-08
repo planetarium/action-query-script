@@ -14,7 +14,7 @@ try {
         throw $errorMessage
     }
     
-    ./scripts/key-derive.ps1 -PrivateKey $publicKey -IsPublicKey
+    ./.scripts/key-derive.ps1 -PrivateKey $publicKey -IsPublicKey
 }
 finally {
     Remove-Item $errorPath -ErrorAction SilentlyContinue

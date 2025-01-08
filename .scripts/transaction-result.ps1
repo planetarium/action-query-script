@@ -12,7 +12,7 @@ $arguments = @{
     txId = $TxId
 }
 
-$field = ./scripts/generate-method.ps1 -Name "transactionResult" -Arguments $arguments -IndentLevel 2 -PrettyPrint
+$field = ./.scripts/generate-method.ps1 -Name "transactionResult" -Arguments $arguments -IndentLevel 2 -PrettyPrint
 $field = $field.TrimStart()
 
 $query = @"
@@ -27,7 +27,7 @@ query {
 }
 "@
 
-./scripts/write-host-graphql.ps1 -Query $query -Quiet:$Quiet
+./.scripts/write-graphql.ps1 -Query $query -Quiet:$Quiet
 
 $startTime = Get-Date
 $endTime = $startTime.AddMilliseconds($MaxPollingTime)
@@ -42,7 +42,7 @@ while ($txStatus -ne "SUCCESS" -and $txStatus -ne "FAILURE" -and (Get-Date) -lt 
     }
 
     Start-Sleep -Milliseconds $PollingInterval
-    $result = ./scripts/invoke.ps1 -Url $Url -Query $query
+    $result = ./.scripts/invoke.ps1 -Url $Url -Query $query
     $txStatus = $result.data.transaction.transactionResult.txStatus
 }
 
@@ -50,7 +50,7 @@ if (!$Quiet) {
     Write-Host "`n"
 }
 
-./scripts/write-host-json.ps1 -Object $result -Quiet:$Quiet
+./.scripts/write-json.ps1 -Object $result -Quiet:$Quiet
 if ($txStatus -ne "SUCCESS") {
     throw "Transaction '$TxId' failed with status: $(ConvertTo-Json $result.data.transaction.transactionResult -Depth 10)"
 }

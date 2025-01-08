@@ -20,7 +20,7 @@ if ($Arguments.Count -gt 0) {
     $items = $Arguments.Keys | ForEach-Object {
         $value = $Arguments[$_]
         if ($value -is [hashtable]) {
-            $value = ./scripts/generate-field -Arguments $value -PrettyPrint
+            $value = ./.scripts/generate-field -Arguments $value -PrettyPrint
         }
         elseif ($value -is [string]) {
             $value = "`"$value`""
