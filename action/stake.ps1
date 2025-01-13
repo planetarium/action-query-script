@@ -8,12 +8,14 @@ Param(
     [Int64]$Amount,
     [Parameter(Mandatory = $true)]
     [securestring]$PassPhrase,
+    [string]$AvatarAddress,
     [string]$Url
 )
 
 $name = "stake"
 $arguments = @{
     amount = $Amount
+    avatarAddress = $AvatarAddress
 }
 
 if ($KeyId) {

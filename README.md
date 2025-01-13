@@ -57,3 +57,13 @@ Address                        0x194bc57685edE1Fcda51D103caC5A8ebfbc1Db59
 KeyId                          641f1388-8086-43ad-af47-3d538e03733b
 
 ```
+
+### Examples
+
+```powershell
+./node/tip.ps1
+```
+
+```powershell
+./action/stake.ps1 <signer> <amount>
+```
