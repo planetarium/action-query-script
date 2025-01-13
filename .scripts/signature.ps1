@@ -14,7 +14,8 @@ try {
     $plainPassword = $PassPhrase.Length ? (ConvertFrom-SecureString -SecureString $PassPhrase -AsPlainText) : ""
     $bytes = [System.Convert]::FromHexString($UnsignedTransaction)
     [System.IO.File]::WriteAllBytes($txPath, $bytes)
-    $signature = planet key sign --passphrase $plainPassword $KeyId $txPath 2>$errorPath
+    $planetPath = ./.scripts/planet.ps1
+    $signature = & $planetPath key sign --passphrase $plainPassword $KeyId $txPath 2>$errorPath
     if ($LASTEXITCODE) {
         $errorMessage = $(Get-Content -Path $tempPath -Raw)
         throw $errorMessage

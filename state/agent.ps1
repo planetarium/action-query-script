@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-    Queries the stake state of an address.
+    Queries the state of an agent.
 
 .PARAMETER Address
-    The address to query the stake state for.
+    The address of the agent to query.
 
 .PARAMETER Url
     The URL of the endpoint to query. If not provided, the default URL is used.
@@ -18,14 +18,14 @@
     If specified, returns detailed information.
 
 .EXAMPLE
-    .\stake.ps1 -Address "0x1234567890abcdef"
+    .\agent.ps1 -Address "0x1234567890abcdef"
 
-    Queries the stake state of the specified address.
+    Queries the state of the agent with the specified address.
 
 .EXAMPLE
-    .\stake.ps1 -Address "0x1234567890abcdef" -AsJson
+    .\agent.ps1 -Address "0x1234567890abcdef" -AsJson
 
-    Queries the stake state of the specified address and returns the result as JSON.
+    Queries the state of the agent with the specified address and returns the result as JSON.
 #>
 
 Param(
@@ -43,18 +43,28 @@ try {
         address = $Address
     }
 
-    $field = ./.scripts/generate-method.ps1 -Name "stakeState" -Arguments $arguments -IndentLevel 2 -PrettyPrint
+    $field = ./.scripts/generate-method.ps1 -Name "agent" -Arguments $arguments -IndentLevel 2 -PrettyPrint
     $field = $field.TrimStart()
 
     $query = @"
 query {
   stateQuery {
     $field {
-      deposit
-      startedBlockIndex
-      receivedBlockIndex
-      cancellableBlockIndex
-      claimableBlockIndex
+      address
+      avatarStates {
+        index
+        address
+      }
+      gold
+      monsterCollectionRound
+      monsterCollectionLevel
+      hasTradedItem
+      crystal
+      pledge {
+        patronAddress
+        approved
+        mead
+      }
     }
   }
 }
@@ -67,7 +77,7 @@ query {
         $Url = ./.scripts/resolve-url.ps1 -Url $Url
         $result = ./.scripts/invoke.ps1 -Url $Url -Query $query
         if (!$Detailed) {
-            $result = $result.data.stateQuery.stakeState
+            $result = $result.data.stateQuery.agent
         }
         
         if ($AsJson) {

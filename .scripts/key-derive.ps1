@@ -6,11 +6,12 @@ Param(
 
 $errorPath = New-TemporaryFile
 try {
+    $planetPath = ./.scripts/planet.ps1
     if ($IsPublicKey) {
-        $line = planet key derive --public-key $PrivateKey 2>$errorPath
+        $line = & $planetPath key derive --public-key $PrivateKey 2>$errorPath
     }
     else {
-        $line = planet key derive $PrivateKey 2>$errorPath
+        $line = & $planetPath key derive $PrivateKey 2>$errorPath
     }
 
     if ($LASTEXITCODE) {

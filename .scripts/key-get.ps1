@@ -8,7 +8,8 @@ Param(
 $errorPath = New-TemporaryFile
 try {
     $plainPassword = $PassPhrase.Length ? (ConvertFrom-SecureString -SecureString $PassPhrase -AsPlainText) : ""
-    $publicKey = planet key export $KeyId --public-key --passphrase "$plainPassword" 2>$errorPath
+    $planetPath = ./.scripts/planet.ps1
+    $publicKey = & $planetPath key export $KeyId --public-key --passphrase "$plainPassword" 2>$errorPath
     if ($LASTEXITCODE) {
         $errorMessage = $(Get-Content -Path $errorPath -Raw)
         throw $errorMessage

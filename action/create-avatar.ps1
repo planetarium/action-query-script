@@ -4,15 +4,28 @@ Param(
     [Parameter(Mandatory = $true, ParameterSetName = "Signer", Position = 0)]
     [string]$Signer,
     [Parameter(Mandatory = $true)]
-    [string]$AgentAddress,
+    [ValidateRange(0, 2)]
+    [int]$AvatarIndex,
+    [Parameter(Mandatory = $true)]
+    [ValidateLength(2, 20)]
+    [string]$AvatarName,
+    [int]$AvatarHair,
+    [int]$AvatarLens,
+    [int]$AvatarEar,
+    [int]$AvatarTail,
     [Parameter(Mandatory = $true)]
     [securestring]$PassPhrase,
     [string]$Url
 )
 
-$name = "unbanGuildMember"
+$name = "createAvatar"
 $arguments = @{
-    agentAddress = $AgentAddress
+    index = $AvatarIndex
+    name  = $AvatarName
+    hair  = $AvatarHair
+    lens  = $AvatarLens
+    ear   = $AvatarEar
+    tail  = $AvatarTail
 }
 
 if ($KeyId) {

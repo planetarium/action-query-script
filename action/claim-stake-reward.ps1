@@ -4,15 +4,15 @@ Param(
     [Parameter(Mandatory = $true, ParameterSetName = "Signer", Position = 0)]
     [string]$Signer,
     [Parameter(Mandatory = $true)]
-    [string]$AgentAddress,
+    [string]$AvatarAddress,
     [Parameter(Mandatory = $true)]
     [securestring]$PassPhrase,
     [string]$Url
 )
 
-$name = "unbanGuildMember"
+$name = "claimStakeReward"
 $arguments = @{
-    agentAddress = $AgentAddress
+    avatarAddress = $AvatarAddress
 }
 
 if ($KeyId) {

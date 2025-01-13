@@ -7,7 +7,9 @@ if (!$Url) {
         $Url = $env:ACTION_QUERY_URL
     }
     else {
-        throw "The URL for the action query is not specified. Please set the -Url parameter or the ACTION_QUERY_URL environment variable."
+        throw "The URL for the action query is not specified. " + 
+        "Please set the -Url parameter or the ACTION_QUERY_URL environment variable. " + 
+        "ex) `$Env:ACTION_QUERY_URL = <graphql-url>"
     }
 }
 

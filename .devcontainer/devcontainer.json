@@ -3,7 +3,17 @@
     "vscode": {
       "extensions": [
         "ms-vscode.powershell"
-      ]
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "pwsh"
+      }
+    }
+  },
+  "postCreateCommand": "dotnet tool install --global Libplanet.Tools --version 5.1.2",
+  "features": {
+    "ghcr.io/devcontainers/features/powershell:1": {},
+    "ghcr.io/devcontainers/features/dotnet:1": {
+      "version": "6.0"
     }
   }
 }

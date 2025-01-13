@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-    Queries the stake state of an address.
+    Queries the state of an avatar.
 
-.PARAMETER Address
-    The address to query the stake state for.
+.PARAMETER AvatarAddress
+    The address of the avatar to query.
 
 .PARAMETER Url
     The URL of the endpoint to query. If not provided, the default URL is used.
@@ -18,19 +18,19 @@
     If specified, returns detailed information.
 
 .EXAMPLE
-    .\stake.ps1 -Address "0x1234567890abcdef"
+    .\avatar.ps1 -AvatarAddress "0x1234567890abcdef"
 
-    Queries the stake state of the specified address.
+    Queries the state of the avatar with the specified address.
 
 .EXAMPLE
-    .\stake.ps1 -Address "0x1234567890abcdef" -AsJson
+    .\avatar.ps1 -AvatarAddress "0x1234567890abcdef" -AsJson
 
-    Queries the stake state of the specified address and returns the result as JSON.
+    Queries the state of the avatar with the specified address and returns the result as JSON.
 #>
 
 Param(
     [Parameter(Mandatory = $true)]
-    [string]$Address,
+    [string]$AvatarAddress,
     [string]$Url,
     [switch]$WhatIf,
     [switch]$AsJson,
@@ -40,21 +40,31 @@ Param(
 Push-Location $PSScriptRoot/..
 try {
     $arguments = @{
-        address = $Address
+        avatarAddress = $AvatarAddress
     }
 
-    $field = ./.scripts/generate-method.ps1 -Name "stakeState" -Arguments $arguments -IndentLevel 2 -PrettyPrint
+    $field = ./.scripts/generate-method.ps1 -Name "avatar" -Arguments $arguments -IndentLevel 2 -PrettyPrint
     $field = $field.TrimStart()
 
     $query = @"
 query {
   stateQuery {
     $field {
-      deposit
-      startedBlockIndex
-      receivedBlockIndex
-      cancellableBlockIndex
-      claimableBlockIndex
+      address
+      blockIndex
+      characterId
+      dailyRewardReceivedIndex
+      agentAddress
+      index
+      updatedAt
+      name
+      exp
+      level
+      actionPoint
+      ear
+      hair
+      lens
+      tail
     }
   }
 }
@@ -67,7 +77,7 @@ query {
         $Url = ./.scripts/resolve-url.ps1 -Url $Url
         $result = ./.scripts/invoke.ps1 -Url $Url -Query $query
         if (!$Detailed) {
-            $result = $result.data.stateQuery.stakeState
+            $result = $result.data.stateQuery.avatar
         }
         
         if ($AsJson) {

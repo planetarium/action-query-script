@@ -3,7 +3,8 @@ Param(
     [string]$Address
 )
 
-$lines = planet key 2>$null
+$planetPath = ./.scripts/planet.ps1
+$lines = & $planetPath key 2>$null
 if ($LASTEXITCODE) {
     throw "Failed to identify key"
 }
