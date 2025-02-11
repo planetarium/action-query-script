@@ -8,8 +8,9 @@
             "name": "PowerShell: Launch Script",
             "type": "PowerShell",
             "request": "launch",
-            "script": "${workspaceFolder}/node/tip.ps1",
+            "script": "${workspaceFolder}/action/session-create.ps1",
             "args": [
+                "0xE4EbDd8e9B9513e03e72312575aa49983342c864"
             ]
         }
     ]
