@@ -1,5 +1,6 @@
 param(
-    [string]$Url
+    [string]$Url,
+    [switch]$Quiet
 )
 
 Push-Location $PSScriptRoot
@@ -29,17 +30,23 @@ try {
         }
 
         if ($oldUrl -eq $Env:ACTION_QUERY_URL) {
-            Write-Host "URL is unchanged."
+            if (-not $Quiet) {
+                Write-Host "URL is unchanged."
+            }
         }
         elseif ($oldUrl) {
-            Write-Host "URL changed from " -NoNewline
-            Write-Host "'$oldUrl'" -ForegroundColor Green -NoNewline
-            Write-Host " to " -NoNewline
-            Write-Host "'$Env:ACTION_QUERY_URL'" -ForegroundColor Green
+            if (-not $Quiet) {
+                Write-Host "URL changed from " -NoNewline
+                Write-Host "'$oldUrl'" -ForegroundColor Green -NoNewline
+                Write-Host " to " -NoNewline
+                Write-Host "'$Env:ACTION_QUERY_URL'" -ForegroundColor Green
+            }
         }
         else {
-            Write-Host "URL set to " -NoNewline
-            Write-Host "'$Env:ACTION_QUERY_URL'" -ForegroundColor Green
+            if (-not $Quiet) {
+                Write-Host "URL set to " -NoNewline
+                Write-Host "'$Env:ACTION_QUERY_URL'" -ForegroundColor Green
+            }
         }
     }
 }

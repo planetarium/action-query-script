@@ -1,5 +1,6 @@
 param(
-    [string]$Address
+    [string]$Address,
+    [switch]$Quiet
 )
 
 Push-Location $PSScriptRoot
@@ -25,17 +26,23 @@ try {
         }
 
         if ($oldSigner -eq $Env:ACTION_QUERY_SIGNER) {
-            Write-Host "Signer is unchanged."
+            if (-not $Quiet) {
+                Write-Host "Signer is unchanged."
+            }
         }
         elseif ($oldSigner) {
-            Write-Host "Signer changed from " -NoNewline
-            Write-Host "'$oldSigner'" -ForegroundColor Green -NoNewline
-            Write-Host " to " -NoNewline
-            Write-Host "'$Env:ACTION_QUERY_SIGNER'" -ForegroundColor Green
+            if (-not $Quiet) {
+                Write-Host "Signer changed from " -NoNewline
+                Write-Host "'$oldSigner'" -ForegroundColor Green -NoNewline
+                Write-Host " to " -NoNewline
+                Write-Host "'$Env:ACTION_QUERY_SIGNER'" -ForegroundColor Green
+            }
         }
         else {
-            Write-Host "Signer set to " -NoNewline
-            Write-Host "'$Env:ACTION_QUERY_SIGNER'" -ForegroundColor Green
+            if (-not $Quiet) {
+                Write-Host "Signer set to " -NoNewline
+                Write-Host "'$Env:ACTION_QUERY_SIGNER'" -ForegroundColor Green
+            }
         }
     }
 }
