@@ -8,13 +8,17 @@ Write-Host "GloveId: $gloveId"
 
 $passPhrase = Read-Host -AsSecureString "Enter PassPhrase"
 $users | ForEach-Object { 
-    ./signer.ps1 $_.Address
+    ./signer.ps1 $_.Address | Out-Null
     ./action/user-create.ps1 -PassPhrase $passPhrase
 }
 
 ./signer.ps1 $organizer.Address
 ./action/glove-register.ps1 $gloveId -PassPhrase $passPhrase -Watch
 ./action/session-create.ps1 $sessionId $gloveId -PassPhrase $passPhrase -Watch
+
+Start-Sleep -Milliseconds 2000
+
+./state/session.ps1 -SessionId $sessionId -AsJson -Colorize
 
 $users | ForEach-Object { 
     ./signer.ps1 $_.Address

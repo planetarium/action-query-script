@@ -2,7 +2,7 @@ Param(
     [ValidateScript(
         { !$_ -or ($_ -match "(?:0x)?[0-9a-fA-F]{40}") },
         ErrorMessage = "Invalid address format.")]
-    [string]$SessionId,
+    [string]$UserId,
     [ValidateScript(
         { $_ -ge 0 },
         ErrorMessage = "Block height must be greater than or equal to 0.")]
@@ -25,11 +25,11 @@ try {
     $stateField = ./.scripts/generate-state-method.ps1 @stateParameters
     $stateField = $stateField.TrimStart()
 
-    $name = "session"
+    $name = "user"
     $fieldParameters = @{
         Name        = $name
         Arguments   = @{
-            sessionId = $SessionId
+            userId = $Address ? $Address : (./.scripts/get-signer.ps1)
         }
         IndentLevel = 2
         PrettyPrint = $true
@@ -41,27 +41,8 @@ try {
 query {
   $stateField {
     $field {
-      rounds {
-        height
-        matches {
-          move1 {
-            playerIndex
-            type
-          }
-          move2 {
-            playerIndex
-            type
-          }
-        }
-      }
-      players {
-        id
-        glove
-        state
-      }
-      state
-      creationHeight
-      startHeight
+       id
+       gloves
     }
   }
 }
