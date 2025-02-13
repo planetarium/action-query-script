@@ -13,6 +13,7 @@ try {
         $Env:ACTION_QUERY_SIGNER
     }
     else {
+        $Address = $Address.StartsWith("0x") ? $Address : "0x$Address"
         $items = ./key/list.ps1
         $signer = $items | Where-Object { $_.Address -eq $Address }
         if (-not $signer) {

@@ -37,7 +37,7 @@ try {
 query {
   nodeStatus {
     tip {
-      index
+      height
       hash
       miner
     }
