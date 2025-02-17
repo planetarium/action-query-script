@@ -31,11 +31,11 @@ try {
 
     ./.scripts/write-log-text.ps1 "### Arguments`n" -OutputToHost:$Detailed
     ./.scripts/write-log-json.ps1 -HashTable @{
-        Url          = $url
-        WhatIf       = $WhatIf.IsPresent
-        AsJson       = $AsJson.IsPresent
-        Colorize     = $Colorize.IsPresent
-        Properties   = $Properties
+        Url        = $url
+        WhatIf     = $WhatIf.IsPresent
+        AsJson     = $AsJson.IsPresent
+        Colorize   = $Colorize.IsPresent
+        Properties = $Properties
     } -OutputToHost:$Detailed
 
     ./.scripts/write-log-text.ps1 "### Mutation`n" -OutputToHost:$Detailed

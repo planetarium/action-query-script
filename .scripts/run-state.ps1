@@ -36,10 +36,10 @@ try {
         AsJson     = $AsJson.IsPresent
         Colorize   = $Colorize.IsPresent
         Properties = $Properties
-    }
+    } -OutputToHost:$Detailed
 
     ./.scripts/write-log-text.ps1 "### Query`n" -OutputToHost:$Detailed
-    ./.scripts/write-log-graphql.ps1 -Query $query
+    ./.scripts/write-log-graphql.ps1 -Query $Query -OutputToHost:$Detailed
 
     if ($WhatIf) {
         if ($Properties) {
@@ -51,12 +51,12 @@ try {
             Write-Warning "The -AsJson parameter is ignored when -WhatIf is set."
         }
     
-        $Colorize ? ($query | pygmentize -l graphql -f terminal256 -O style=monokai) : $query
+        $Colorize ? ($Query | pygmentize -l graphql -f terminal256 -O style=monokai) : $Query
     }
     else {
         $parameters = @{
-            Url        = $url
-            Query      = $query
+            Url   = $url
+            Query = $Query
         }
         $result = ./.scripts/invoke-query.ps1 @parameters
         if ($result.errors) {
@@ -71,15 +71,15 @@ try {
 
         $json = ConvertTo-Json -InputObject $result -Depth 100
 
+        ./.scripts/write-log-text.ps1 "### Result`n" -OutputToHost:$Detailed
+        ./.scripts/write-log-json.ps1 -Object $result -OutputToHost:$Detailed
+
         if ($AsJson) {
             $Colorize ? ($json | pygmentize -l json -f terminal256 -O style=monokai) : $json
         }
         else {
             ConvertTo-Json $result -Depth 100 | ConvertFrom-Json -AsHashtable -Depth 100
         }
-
-        ./.scripts/write-log-text.ps1 "### Result`n" -OutputToHost:$Detailed
-        ./.scripts/write-log-json.ps1 -Object $result
     }
 }
 finally {
