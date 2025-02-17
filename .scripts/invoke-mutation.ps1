@@ -2,14 +2,14 @@ Param(
     [Parameter(Mandatory = $true)]
     [uri]$Url,
     [Parameter(Mandatory = $true)]
-    [string]$Query,
+    [string]$Mutation,
     [switch]$WhatIf
 )
 
 if ($WhatIf) {
-    $Query
+    $Mutation
 }
 else {
-    $body = @{ query = $Query } | ConvertTo-Json -Depth 100
+    $body = @{ query = $Mutation } | ConvertTo-Json -Depth 100
     Invoke-RestMethod -Method Post -Uri $Url -Body $body -ContentType "application/json"
 }
