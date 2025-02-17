@@ -5,8 +5,7 @@ Param(
     [securestring]$PassPhrase,
     [hashtable]$Arguments,
     [switch]$Detailed,
-    [ValidatePattern('^\d+(\.\d+)?$')]
-    [string]$MaxGasPrice = "0.00001",
+    [decimal]$MaxGasPrice = 0.00001,
     [switch]$Confirm,
     [switch]$Watch
 )

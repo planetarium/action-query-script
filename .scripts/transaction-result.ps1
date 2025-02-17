@@ -41,7 +41,7 @@ if ($Detailed) {
     Write-Host -NoNewline "Polling: "
 }
 
-while ($txStatus -ne "SUCCESS" -and $txStatus -ne "FAILURE" -and (Get-Date) -lt $endTime) {
+while ($txStatus -ne "Success" -and $txStatus -ne "Failure" -and (Get-Date) -lt $endTime) {
     if ($Detailed) {
         Write-Host -NoNewline "."
     }
@@ -63,7 +63,7 @@ if ($Detailed) {
 
 ./.scripts/write-log-text.ps1 -Text "Result`n" -OutputToHost:$Detailed
 ./.scripts/write-log-json.ps1 -Object $result -OutputToHost:$Detailed
-if ($txStatus -ne "SUCCESS") {
+if ($txStatus -ne "Success") {
     $status = ConvertTo-Json $result.data.transaction.transactionResult -Depth 10
     throw "Transaction '$TxId' failed with status: $status"
 }

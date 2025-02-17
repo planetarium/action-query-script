@@ -4,8 +4,7 @@ Param(
     [Parameter(Mandatory = $true)]
     [string]$PublicKey,
     [Parameter(Mandatory = $true)]
-    [ValidatePattern('^\d+(\.\d+)?$')]
-    [string]$MaxGasPrice,
+    [decimal]$MaxGasPrice,
     [Parameter(Mandatory = $true)]
     [long]$Nonce,
     [Parameter(Mandatory = $true)]

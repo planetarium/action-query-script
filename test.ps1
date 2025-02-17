@@ -2,6 +2,7 @@ $users = ./key/list.ps1 | Select-Object -First 7
 $organizer = ./key/list.ps1 | Select-Object -Last 1
 $sessionId = (./key/new.ps1).Address
 $gloveId = (./key/new.ps1).Address
+Write-Host "SessionId: $sessionId"
 
 $passPhrase = Read-Host -AsSecureString "Enter PassPhrase"
 $users | ForEach-Object { 
