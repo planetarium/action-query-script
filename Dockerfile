@@ -24,6 +24,7 @@ WORKDIR /workspaces/action-query-script
 
 # Copy the scripts into the container
 COPY action /workspaces/action-query-script/action
+COPY mutation /workspaces/action-query-script/mutation
 COPY key /workspaces/action-query-script/key
 COPY node /workspaces/action-query-script/node
 COPY state /workspaces/action-query-script/state
@@ -31,6 +32,7 @@ COPY .scripts /workspaces/action-query-script/.scripts
 COPY signer.ps1 /workspaces/action-query-script
 COPY url.ps1 /workspaces/action-query-script
 COPY help.ps1 /workspaces/action-query-script
+COPY test-mutation.ps1 /workspaces/action-query-script
 
 # Copy the PowerShell profile script into the container
 COPY .scripts/profile.ps1 /root/.config/powershell/Microsoft.PowerShell_profile.ps1
