@@ -58,9 +58,14 @@ try {
             $move = (Get-Random -Minimum 0 -Maximum 2) -eq 0 ? $match.move1 : $match.move2
             $player = $session.players[$move.playerIndex]
             $user = $users | Where-Object { $_.Address -eq "0x$($player.id)" } | Select-Object -First 1
-            $moveType = $moveTypes | Get-Random
-            ./mutation/move-submit.ps1 $user.PrivateKey $sessionId $moveType | Out-Null
-            Write-Host "Move submitted: $($user.Address), $moveType"
+            if ($user) {
+                $moveType = $moveTypes | Get-Random
+                ./mutation/move-submit.ps1 $user.PrivateKey $sessionId $moveType | Out-Null
+                Write-Host "Move submitted: $($user.Address), $moveType"
+            }
+            else {
+                Write-Warning "User not found: $($player.id)"
+            }
         }
 
         $session = ./state/session.ps1 -SessionId $sessionId
