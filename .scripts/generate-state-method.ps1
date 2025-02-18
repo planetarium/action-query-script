@@ -2,7 +2,8 @@ Param(
     [long]$BlockHeight = -1,
     [string]$BlockHash,
     [switch]$PrettyPrint,
-    [int]$IndentLevel = 0
+    [int]$IndentLevel = 0,
+    [switch]$TrimStart
 )
 
 $name = "stateQuery"
@@ -25,5 +26,6 @@ $parameters = @{
     Arguments   = $arguments
     IndentLevel = $IndentLevel
     PrettyPrint = $PrettyPrint
+    TrimStart   = $TrimStart
 }
 ./.scripts/generate-method.ps1 @parameters

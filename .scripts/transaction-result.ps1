@@ -15,9 +15,9 @@ $fieldParameters = @{
     }
     IndentLevel = 2
     PrettyPrint = $true
+    TrimStart   = $true
 }
 $field = ./.scripts/generate-method.ps1 @fieldParameters
-$field = $field.TrimStart()
 
 $query = @"
 query {

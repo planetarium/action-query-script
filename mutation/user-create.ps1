@@ -17,9 +17,9 @@ try {
         }
         IndentLevel = 1
         PrettyPrint = $true
+        TrimStart   = $true
     }
     $method = ./.scripts/generate-method.ps1 @methodParameters
-    $method = $method.TrimStart()
 
     $mutation = @"
 mutation {

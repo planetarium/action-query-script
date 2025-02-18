@@ -11,9 +11,8 @@ Param(
 )
 
 $oldErrorActionPreference = $ErrorActionPreference
+$oldLogPath = $Global:LogPath
 $ErrorActionPreference = 'Stop'
-
-
 try {
     $planetVersion = Invoke-Expression "planet --version"
     if ($LASTEXITCODE) {
@@ -22,9 +21,22 @@ try {
 
     $scriptCategory = Split-Path (Split-Path $MyInvocation.ScriptName -Parent) -Leaf
     $scriptName = Split-Path -Path $MyInvocation.ScriptName -LeafBase
-    $filename = "$(Get-Date -Format "yyyy-MM-ddTHH-mm-ss")-$scriptCategory-$scriptName.md"
-    $Env:ACTION_QUERY_LOG_PATH = Join-Path ".logs" $filename
-    New-Item -ItemType File -Path $Env:ACTION_QUERY_LOG_PATH -Force | Out-Null
+    $dateTime = $(Get-Date -Format "yyyy-MM-ddTHH-mm-ss")
+    if (-not $Global:LogPath) {
+        $filename = "$dateTime-$scriptCategory-$scriptName.md"
+        $Global:LogPath = Join-Path ".logs" $filename
+        New-Item -ItemType File -Path $Global:LogPath -Force | Out-Null
+    }
+    else {
+        if ($Global:LogIndex -is [int]) {
+            $index = "$Global:LogIndex. "
+            $Global:LogIndex++
+        }
+
+        ./.scripts/write-log-text.ps1 "## $index$scriptCategory-$scriptName`n" -OutputToHost:$Detailed
+        ./.scripts/write-log-text.ps1 "$dateTime`n" -OutputToHost:$Detailed
+    }
+
     $url = ./.scripts/get-url.ps1
     $signer = ./.scripts/get-signer.ps1
     $keyId = ./.scripts/key-id.ps1 -Address $signer
@@ -124,5 +136,7 @@ try {
 }
 finally {
     $ErrorActionPreference = $oldErrorActionPreference
-    $Env:ACTION_QUERY_LOG_PATH = $null
+    if (-not $oldLogPath) {
+        Remove-Variable -Name LogPath -Scope Global
+    }
 }

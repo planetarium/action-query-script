@@ -3,7 +3,8 @@ Param(
     [string]$Name,
     [hashtable]$Arguments,
     [switch]$PrettyPrint,
-    [int]$IndentLevel = 0
+    [int]$IndentLevel = 0,
+    [switch]$TrimStart
 )
 
 $level1 = "".PadRight($IndentLevel * 2, ' ')
@@ -47,6 +48,10 @@ if ($Arguments.Count -gt 0) {
     else {
         $expression += ")"
     }
+}
+
+if ($TrimStart) {
+    $expression = $expression.TrimStart()
 }
 
 $expression
