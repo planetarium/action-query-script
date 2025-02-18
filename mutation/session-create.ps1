@@ -5,6 +5,11 @@ Param(
     [string]$SessionId,
     [Parameter(Mandatory = $true, Position = 2)]
     [string]$PrizeId,
+    [int]$MaximumUser = 8,
+    [int]$MinimumUser = 2,
+    [int]$RemainingUser = 1,
+    [long]$RoundInterval = 5,
+    [long]$WaitingInterval = 10,
     [switch]$Detailed,
     [switch]$AsJson,
     [switch]$WhatIf,
@@ -17,9 +22,14 @@ try {
     $methodParameters = @{
         Name        = $name
         Arguments   = @{
-            privateKey = $PrivateKey
-            sessionId  = $SessionId
-            prize      = $PrizeId
+            privateKey      = $PrivateKey
+            sessionId       = $SessionId
+            prize           = $PrizeId
+            maximumUser     = $MaximumUser
+            minimumUser     = $MinimumUser
+            remainingUser   = $RemainingUser
+            roundInterval   = $RoundInterval
+            waitingInterval = $WaitingInterval
         }
         IndentLevel = 1
         PrettyPrint = $true
