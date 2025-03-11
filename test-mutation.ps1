@@ -45,11 +45,6 @@ try {
 
     $session = ./state/session.ps1 -SessionId $sessionId
     $tip = ./node/tip.ps1
-    $moveTypes = @(
-        "rock"
-        "paper"
-        "scissors"
-    )
 
     while (($session.state -ne "Ended")) {
         Start-Sleep -Milliseconds 10
@@ -63,9 +58,9 @@ try {
             $player = $session.players[$move.playerIndex]
             $user = $users | Where-Object { $_.Address -eq "0x$($player.id)" } | Select-Object -First 1
             if ($user) {
-                $moveType = $moveTypes | Get-Random
-                ./mutation/move-submit.ps1 $user.PrivateKey $sessionId $moveType | Out-Null
-                Write-Host "Move submitted: $($user.Address), $moveType"
+                $gloveIndex = 5 | Get-Random
+                ./mutation/move-submit.ps1 $user.PrivateKey $sessionId $gloveIndex | Out-Null
+                Write-Host "Move submitted: $($user.Address), $gloveIndex"
             }
             else {
                 Write-Warning "User not found: $($player.id)"
