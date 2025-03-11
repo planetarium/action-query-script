@@ -27,6 +27,8 @@ try {
         Write-Host "User created: $($_.Address)"
     }
 
+    ./mutation/user-create.ps1 -PrivateKey $organizer.PrivateKey | Out-Null
+    Write-Host "Organizer created: $($organizer.Address)"
     $txId = ./mutation/glove-register.ps1 $organizer.PrivateKey $gloveId
     ./.scripts/transaction-result.ps1 -Url $(./url.ps1) -TxId $txId
     Write-Host "Glove registered: $gloveId"
@@ -52,7 +54,9 @@ try {
     while (($session.state -ne "Ended")) {
         Start-Sleep -Milliseconds 10
 
-        if (($tip.height -ge $session.startHeight) -and ($session.rounds.Count -gt 0)) {
+        if (($tip.height -ge $session.startHeight) -and
+              ($session.rounds.Count -gt 0) -and
+              ($session.state -eq "Active")) {
             $round = $session.rounds[-1]
             $match = $round.matches | Get-Random 
             $move = (Get-Random -Minimum 0 -Maximum 2) -eq 0 ? $match.move1 : $match.move2
