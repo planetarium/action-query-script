@@ -8,8 +8,9 @@ Param(
     [int]$MaximumUser = 8,
     [int]$MinimumUser = 2,
     [int]$RemainingUser = 1,
-    [long]$RoundInterval = 5,
-    [long]$WaitingInterval = 10,
+    [long]$StartAfter = 20,
+    [long]$RoundInterval = 7,
+    [long]$roundLength = 20,
     [switch]$Detailed,
     [switch]$AsJson,
     [switch]$WhatIf,
@@ -28,8 +29,9 @@ try {
             maximumUser     = $MaximumUser
             minimumUser     = $MinimumUser
             remainingUser   = $RemainingUser
+            startAfter      = $StartAfter
+            roundLength     = $roundLength
             roundInterval   = $RoundInterval
-            waitingInterval = $WaitingInterval
         }
         IndentLevel = 1
         PrettyPrint = $true
