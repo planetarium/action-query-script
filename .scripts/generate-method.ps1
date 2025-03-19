@@ -19,15 +19,18 @@ if ($Arguments.Count -gt 0) {
     }
 
     $items = $Arguments.Keys | ForEach-Object {
-        $value = $Arguments[$_]
-        if ($value -is [hashtable]) {
-            $value = ./.scripts/generate-field -Arguments $value -PrettyPrint
-        }
-        elseif ($value -is [string]) {
-            $value = "`"$value`""
-        }
-
         $key = $_
+        $value = ./.scripts/generate-parameter.ps1 -Argument $Arguments[$_] -PrettyPrint
+        # if ($value -is [hashtable]) {
+        #     $value = ./.scripts/generate-field -Arguments $value -PrettyPrint
+        # }
+        # elseif ($value -is [string]) {
+        #     $value = "`"$value`""
+        # }
+        # elseif ($value -is [array]) {
+        #     Write-Host "Array is not supported"
+        # }
+
         "$($key): $value"
     }
     $items = $items -join $($PrettyPrint ? ", `n" : ", ") -split "`n"

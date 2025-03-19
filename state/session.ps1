@@ -41,27 +41,37 @@ try {
 query {
   $stateField {
     $field {
-      rounds {
-        height
-        matches {
-          move1 {
-            playerIndex
-            type
-          }
-          move2 {
-            playerIndex
-            type
-          }
-        }
-      }
-      players {
-        id
-        glove
-        state
-      }
       state
       creationHeight
       startHeight
+      height
+      players {
+        id
+        gloves
+        state
+      }
+      phases {
+        height
+        matches {
+          startHeight
+          players
+          state
+          winner
+          rounds {
+            winner
+            condition1 {
+              healthPoint
+              gloveUsed
+              submission
+            }
+            condition2 {
+              healthPoint
+              gloveUsed
+              submission
+            }
+          }
+        }
+      }
     }
   }
 }

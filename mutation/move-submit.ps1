@@ -4,20 +4,12 @@ Param(
     [Parameter(Mandatory = $true, Position = 1)]
     [string]$SessionId,
     [Parameter(Mandatory = $true, Position = 2)]
-    [ValidateSet("rock", "scissors", "paper")]
-    [string]$Move,
+    [int]$GloveIndex,
     [switch]$Detailed,
     [switch]$AsJson,
     [switch]$WhatIf,
     [switch]$Colorize
 )
-
-enum MoveType {
-    NONE
-    ROCK
-    SCISSORS
-    PAPER
-}
 
 Push-Location $PSScriptRoot/..
 try {
@@ -27,7 +19,7 @@ try {
         Arguments   = @{
             privateKey = $PrivateKey
             sessionId  = $SessionId
-            move       = [MoveType]$Move
+            gloveIndex = $GloveIndex
         }
         IndentLevel = 1
         PrettyPrint = $true
