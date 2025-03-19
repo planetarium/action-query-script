@@ -3,6 +3,8 @@ Param(
     [string]$PrivateKey,
     [Parameter(Mandatory = $true, Position = 1)]
     [string]$SessionId,
+    [Parameter(Mandatory = $true, Position = 2)]
+    [string[]]$Gloves,
     [switch]$Detailed,
     [switch]$AsJson,
     [switch]$WhatIf,
@@ -17,6 +19,7 @@ try {
         Arguments   = @{
             privateKey = $PrivateKey
             sessionId  = $SessionId
+            gloves     = $Gloves
         }
         IndentLevel = 1
         PrettyPrint = $true

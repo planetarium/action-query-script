@@ -25,26 +25,18 @@ Param(
     [Parameter(Mandatory = $true, Position = 0)]
     [string]$SessionId,
     [Parameter(Mandatory = $true, Position = 1)]
-    [ValidateSet("rock", "scissors", "paper")]
-    [string]$Move,
+    [int]$GloveIndex,
     [Parameter(Mandatory = $true)]
     [securestring]$PassPhrase,
     [switch]$Detailed,
     [switch]$Watch
 )
 
-enum MoveType {
-    NONE
-    ROCK
-    SCISSORS
-    PAPER
-}
-
 $runParameters = @{
     Name       = "submitMove"
     Arguments  = @{
-        sessionId = $SessionId
-        move      = [MoveType]$Move
+        sessionId  = $SessionId
+        gloveIndex = $GloveIndex
     }
     PassPhrase = $PassPhrase
     Confirm    = $true
