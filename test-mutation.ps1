@@ -12,7 +12,7 @@ try {
     $users = ./key/new.ps1 -Count 7
     $organizer = ./key/new.ps1 -Count 1
     $sessionId = (./key/new.ps1).Address
-    $gloveId = (./key/new.ps1).Address
+    $gloveId = "0x0000000000000000000000000000000000000000"
 
     Write-Host "Users:"
     Write-Host ($users | ConvertTo-Json -Depth 10)
@@ -29,9 +29,6 @@ try {
 
     ./mutation/user-create.ps1 -PrivateKey $organizer.PrivateKey | Out-Null
     Write-Host "Organizer created: $($organizer.Address)"
-    $txId = ./mutation/glove-register.ps1 $organizer.PrivateKey $gloveId
-    ./.scripts/transaction-result.ps1 -Url $(./url.ps1) -TxId $txId
-    Write-Host "Glove registered: $gloveId"
 
     $txId = ./mutation/session-create.ps1 $organizer.PrivateKey $sessionId $gloveId
     ./.scripts/transaction-result.ps1 -Url $(./url.ps1) -TxId $txId
@@ -39,7 +36,7 @@ try {
 
     $users | ForEach-Object { 
         $userKey = $_.PrivateKey
-        ./mutation/session-join.ps1 $userKey $sessionId | Out-Null
+        ./mutation/session-join.ps1 $userKey $sessionId "0x0000000000000000000000000000000000000000","0x0000000000000000000000000000000000000000","0x0000000000000000000000000000000000000001","0x0000000000000000000000000000000000000001","0x0000000000000000000000000000000000000002" | Out-Null
         Write-Host "User joined to session: $($_.Address) => $sessionId"
     }
 

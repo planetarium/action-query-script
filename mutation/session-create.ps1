@@ -9,8 +9,11 @@ Param(
     [int]$MinimumUser = 2,
     [int]$RemainingUser = 1,
     [long]$StartAfter = 20,
+    [int]$MaxRounds = 5,
+    [long]$RoundLength = 20,
     [long]$RoundInterval = 7,
-    [long]$roundLength = 20,
+    [int]$InitialHealthPoint = 100,
+    [int]$NumberOfGloves = 5,
     [switch]$Detailed,
     [switch]$AsJson,
     [switch]$WhatIf,
@@ -23,15 +26,18 @@ try {
     $methodParameters = @{
         Name        = $name
         Arguments   = @{
-            privateKey      = $PrivateKey
-            sessionId       = $SessionId
-            prize           = $PrizeId
-            maximumUser     = $MaximumUser
-            minimumUser     = $MinimumUser
-            remainingUser   = $RemainingUser
-            startAfter      = $StartAfter
-            roundLength     = $roundLength
-            roundInterval   = $RoundInterval
+            privateKey          = $PrivateKey
+            sessionId           = $SessionId
+            prize               = $PrizeId
+            maximumUser         = $MaximumUser
+            minimumUser         = $MinimumUser
+            remainingUser       = $RemainingUser
+            startAfter          = $StartAfter
+            maxRounds           = $MaxRounds
+            roundLength         = $RoundLength
+            roundInterval       = $RoundInterval
+            initialHealthPoint  = $InitialHealthPoint
+            numberOfGloves      = $NumberOfGloves
         }
         IndentLevel = 1
         PrettyPrint = $true
